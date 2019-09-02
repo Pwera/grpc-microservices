@@ -13,8 +13,12 @@ message GreetResponse {
     string result = 1;
 }
 service GreetService {
-    //Unary
-    rpc Greet(GreetRequest) returns (GreetResponse){};
-    //Server
-    rpc GreetManyTimes(GreetRequest) returns (stream GreetResponse){};
+    // Unary
+    rpc Unary(GreetRequest) returns (GreetResponse){};
+    // Server Streaming
+    rpc ServerStreaming(GreetRequest) returns (stream GreetResponse){};
+    // Client Streaming
+    rpc ClientStreaming(stream GreetRequest) returns (GreetResponse){};
+    // Bidi Streaming
+    rpc StreamEveryone(stream GreetRequest) returns (stream GreetResponse){};
 }

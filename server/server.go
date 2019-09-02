@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"strconv"
@@ -14,8 +15,8 @@ import (
 
 type server struct{}
 
-func (*server) Greet(ctx context.Context, req *todo.GreetRequest) (*todo.GreetResponse, error) {
-	fmt.Println("Greet function called %w", req)
+func (*server) Unary(ctx context.Context, req *todo.GreetRequest) (*todo.GreetResponse, error) {
+	fmt.Println("Unary function called %w", req)
 	first := req.GetGreet().GetFirst()
 	result := "Hello" + first
 	res := &todo.GreetResponse{
@@ -24,8 +25,8 @@ func (*server) Greet(ctx context.Context, req *todo.GreetRequest) (*todo.GreetRe
 	return res, nil
 }
 
-func (*server) GreetManyTimes(req *todo.GreetRequest, stream todo.GreetService_GreetManyTimesServer) error {
-	fmt.Println("GreetManyTimes function called %w", req)
+func (*server) ServerStreaming(req *todo.GreetRequest, stream todo.GreetService_ServerStreamingServer) error {
+	fmt.Println("ServerStreaming function called %w", req)
 	first := req.GetGreet().GetFirst()
 	for i := 0; i < 10; i++ {
 
@@ -37,6 +38,52 @@ func (*server) GreetManyTimes(req *todo.GreetRequest, stream todo.GreetService_G
 		time.Sleep(100 * time.Millisecond)
 	}
 	return nil
+
+}
+func (*server) ClientStreaming(stream todo.GreetService_ClientStreamingServer) error {
+	fmt.Println("ClientStreaming function called")
+	result := ""
+	for {
+		req, err := stream.Recv()
+
+		if err == io.EOF {
+			return stream.SendAndClose(&todo.GreetResponse{
+				Result: result,
+			})
+		}
+		if err != nil {
+			log.Fatal("Error while reading client %w", err)
+		}
+
+		first := req.GetGreet().GetFirst()
+		result += first + " "
+		fmt.Println(result)
+	}
+
+}
+
+func (*server) StreamEveryone(stream todo.GreetService_StreamEveryoneServer) error {
+	fmt.Println("StreamEveryone function called")
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Fatal("Error while reading client stream %w", err)
+			return err
+		}
+		first := req.GetGreet().GetFirst()
+		result := "Hello " + first + " !"
+		err = stream.Send(&todo.GreetResponse{
+			Result: result,
+		})
+		if err != nil {
+			log.Fatal("Error while sending client stream %w", err)
+			return err
+		}
+	}
 
 }
 
