@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package todo;
+
+message Greeting {
+    string first = 1;
+    string second = 2;
+}
+message GreetRequest {
+    Greeting greet = 1;
+}
+message GreetResponse {
+    string result = 1;
+}
+service GreetService {
+    //Unary
+    rpc Greet(GreetRequest) returns (GreetResponse){};
+    //Server
+    rpc GreetManyTimes(GreetRequest) returns (stream GreetResponse){};
+}
