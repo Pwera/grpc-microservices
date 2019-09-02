@@ -83,3 +83,22 @@ The client will send many message to the server and will receive one response fo
 ```
 
 
+## gRPC Error codes
+http://avi.im/grpc-errors/
+If an application needs to return extra information on top of an error code, it can use the metadata context.
+
+## gRPC Deadlines
+https://grpc.io/blog/deadlines
+Deadlines allow gRPC clients to specify how long they are willing to wait for an RPC to complete before the RPC is terminated with the DEADLINE_EXEEDED.
+The server should check if the deadline has exeeded and cancel the work it is doing.
+
+## SSL Encryption in gRPC
+https://grpc.io/docs/guides/auth/
+In production gRPC calls should be running with encryption enabled.
+gRPC can use both Encryption (1-way verification) and Authentication (2-wayverification)
+
+
+``` 
+     ...
+```
+

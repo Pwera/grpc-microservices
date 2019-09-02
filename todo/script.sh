@@ -10,4 +10,3 @@
 
 
 protoc -I . todo.proto --go_out=plugins=grpc:.
-#protoc --proto_path=proto  --go_out=plugins=grpc:proto service.proto

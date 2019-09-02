@@ -9,6 +9,10 @@ import (
 	"strconv"
 	"time"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/status"
+
 	"github.com/pwera/gRPC-notes/todo"
 	grpc "google.golang.org/grpc"
 )
@@ -17,7 +21,19 @@ type server struct{}
 
 func (*server) Unary(ctx context.Context, req *todo.GreetRequest) (*todo.GreetResponse, error) {
 	fmt.Println("Unary function called %w", req)
+	for i := 0; i < 3; i++ {
+		if ctx.Err() == context.Canceled {
+			fmt.Println("The server cancelled the request")
+			return nil, status.Error(codes.Canceled, "The server cancelled the request")
+		}
+		time.Sleep(1 * time.Second)
+	}
 	first := req.GetGreet().GetFirst()
+	if first == "" {
+		return nil, status.Errorf(
+			codes.InvalidArgument, "Received an empty string",
+		)
+	}
 	result := "Hello" + first
 	res := &todo.GreetResponse{
 		Result: result,
@@ -93,8 +109,20 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
-	srv := grpc.NewServer()
 
+	tls := true
+	opts := []grpc.ServerOption{}
+	if tls {
+		certFile := "ssl/server.crt"
+		keyFile := "ssl/server.pem"
+		creds, sslErr := credentials.NewServerTLSFromFile(certFile, keyFile)
+		if sslErr != nil {
+			log.Fatalf("Failed loading certificates %v", sslErr)
+		}
+		opts = append(opts, grpc.Creds(creds))
+	}
+
+	srv := grpc.NewServer(opts...)
 	todo.RegisterGreetServiceServer(srv, &server{})
 
 	if err := srv.Serve(lis); err != nil {

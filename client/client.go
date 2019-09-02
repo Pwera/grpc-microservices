@@ -7,25 +7,41 @@ import (
 	"log"
 	"time"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/status"
+
 	"github.com/pwera/gRPC-notes/todo"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	tls := true
+	opts := grpc.WithInsecure()
+	if tls {
+		certFile := "ssl/ca.crt"
+		creds, sslError := credentials.NewClientTLSFromFile(certFile, "")
+		if sslError != nil {
+			log.Fatalf("Eror while loading CA trust certificate: %v", sslError)
+			return
+		}
+		opts = grpc.WithTransportCredentials(creds)
+	}
+
+	conn, err := grpc.Dial("localhost:50051", opts)
 	if err != nil {
 		log.Fatalf("Couldnt connect to: %v", err)
 	}
 	defer conn.Close()
 	c := todo.NewGreetServiceClient(conn)
 
-	// doUnary(c)
+	doUnary(c)
 
 	// doServerStreaming(c)
 
 	// doClientStreaming(c)
 
-	doBiDiStreaming(c)
+	// doBiDiStreaming(c)
 }
 
 func doBiDiStreaming(c todo.GreetServiceClient) {
@@ -36,20 +52,7 @@ func doBiDiStreaming(c todo.GreetServiceClient) {
 		log.Fatalf("Error while creating stream: %v", err)
 		return
 	}
-	requests := []*todo.GreetRequest{
-		&todo.GreetRequest{
-			Greet: &todo.Greeting{
-				First:  "First1",
-				Second: "Second1",
-			},
-		},
-		&todo.GreetRequest{
-			Greet: &todo.Greeting{
-				First:  "First2",
-				Second: "Second2",
-			},
-		},
-	}
+	requests := prepareData()
 
 	waitc := make(chan struct{})
 	// send a bunch of messages
@@ -82,20 +85,7 @@ func doBiDiStreaming(c todo.GreetServiceClient) {
 func doClientStreaming(c todo.GreetServiceClient) {
 	fmt.Printf("Start ClientStreaming %v", c)
 
-	requests := []*todo.GreetRequest{
-		&todo.GreetRequest{
-			Greet: &todo.Greeting{
-				First:  "First1",
-				Second: "Second1",
-			},
-		},
-		&todo.GreetRequest{
-			Greet: &todo.Greeting{
-				First:  "First2",
-				Second: "Second2",
-			},
-		},
-	}
+	requests := prepareData()
 
 	stream, err := c.ClientStreaming(context.Background())
 	if err != nil {
@@ -143,15 +133,50 @@ func doServerStreaming(c todo.GreetServiceClient) {
 
 func doUnary(c todo.GreetServiceClient) {
 	fmt.Printf("Start Unary %v", c)
-	req := &todo.GreetRequest{
-		Greet: &todo.Greeting{
-			First:  "Pioter",
-			Second: "Wera",
-		},
-	}
-	res, err := c.Unary(context.Background(), req)
+	req := prepareData()[0]
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
+	res, err := c.Unary(ctx, req)
 	if err != nil {
-		log.Fatalf("Couldn't connect to server %v", err)
+		respErr, ok := status.FromError(err)
+		if ok {
+			fmt.Println(respErr)
+			switch respErr.Code() {
+			case codes.InvalidArgument:
+				fmt.Println("ERROR: Empty string sended")
+				break
+			case codes.DeadlineExceeded:
+				fmt.Println("ERROR: Deadline was exceeded")
+				break
+			default:
+				log.Fatalf("Couldn't connect to server %v", err)
+				break
+			}
+
+		} else {
+			log.Fatalf("Erro while calling service %v", err)
+		}
+		return
 	}
 	fmt.Printf("Response from server %v", res)
+}
+
+func prepareData() []*todo.GreetRequest {
+	requests := []*todo.GreetRequest{
+		&todo.GreetRequest{
+			Greet: &todo.Greeting{
+				First:  "First1",
+				Second: "Second1",
+			},
+		},
+		&todo.GreetRequest{
+			Greet: &todo.Greeting{
+				First:  "First2",
+				Second: "Second2",
+			},
+		},
+	}
+	fmt.Println("prepareData: %w", requests)
+	return requests
 }
