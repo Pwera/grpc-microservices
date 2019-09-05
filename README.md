@@ -97,8 +97,20 @@ https://grpc.io/docs/guides/auth/
 In production gRPC calls should be running with encryption enabled.
 gRPC can use both Encryption (1-way verification) and Authentication (2-wayverification)
 
+## gRPC Reflection & CLI
+We may want reflection for two reasons:
+- Having servers "expose" which endpoints are available
+- Allowing command line interfaces to talk to our server without have a preliminary .proto
+
 
 ``` 
-     ...
-```
+     wget https://github.com/ktr0731/evans/releases/download/0.8.2/evans_linux_amd64.tar.gz
+     evans -p 50051 -r
+     show services
+     call Unary
+     
 
+```
+Evans CLI
+
+## Blog with MongoDB

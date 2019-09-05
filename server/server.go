@@ -11,6 +11,7 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
 	"github.com/pwera/gRPC-notes/todo"
@@ -110,7 +111,7 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	tls := true
+	tls := false
 	opts := []grpc.ServerOption{}
 	if tls {
 		certFile := "ssl/server.crt"
@@ -124,6 +125,8 @@ func main() {
 
 	srv := grpc.NewServer(opts...)
 	todo.RegisterGreetServiceServer(srv, &server{})
+
+	reflection.Register(srv)
 
 	if err := srv.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
