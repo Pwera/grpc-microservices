@@ -2,9 +2,12 @@ package me.piotr.wera.customer.client;
 
 import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.Uninterruptibles;
+import io.grpc.Deadline;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import io.opencensus.trace.Status;
 import me.piotr.wera.customer.CustomerRequest;
 import me.piotr.wera.customer.CustomerResponse;
 import me.piotr.wera.customer.CustomerServiceGrpc;
@@ -27,7 +30,19 @@ public class CustomerClient {
         final CustomerServiceGrpc.CustomerServiceBlockingStub syncClient = CustomerServiceGrpc.newBlockingStub(channel);
 
         System.out.println("Calling gRPC Unary Method");
-        Stream.of(syncClient.myServiceUnary(constructRequest())).forEach(this::responseFromServer);
+        try {
+            Stream.of(
+                    syncClient.withDeadline(Deadline.after(300, TimeUnit.MILLISECONDS))
+                            .myServiceUnary(constructRequest())).forEach(this::responseFromServer);
+        } catch (StatusRuntimeException e) {
+            if (Status.INVALID_ARGUMENT.equals(e.getStatus())) {
+                System.out.println("INVALID_ARGUMENT error");
+            } else if (Status.DEADLINE_EXCEEDED.equals(e.getStatus())) {
+                System.out.println("DEADLINE_EXCEEDED error");
+            } else {
+                e.printStackTrace();
+            }
+        }
 
 
         System.out.println("Calling gRPC Server Streaming Method");
@@ -61,7 +76,7 @@ public class CustomerClient {
         return CustomerRequest
                 .newBuilder()
                 .setValue(messageID % 2 == 0 ? "expected" : "not-exxpected")
-                .setId(messageID++)
+                .setId(1)
                 .build();
     }
 

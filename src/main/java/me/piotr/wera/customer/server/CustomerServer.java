@@ -1,7 +1,9 @@
 package me.piotr.wera.customer.server;
 
+import io.grpc.Context;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import me.piotr.wera.customer.CustomerRequest;
 import me.piotr.wera.customer.CustomerResponse;
@@ -28,8 +30,14 @@ public class CustomerServer extends CustomerServiceGrpc.CustomerServiceImplBase 
 
     @Override
     public void myServiceUnary(CustomerRequest request, StreamObserver<CustomerResponse> responseObserver) {
-        Stream.of(request, this, "myService function").forEach(System.out::println);
+        Stream.of(request, this, Context.current().toString(), "myService function").forEach(System.out::println);
 
+        if (request.getId() < 0) {
+            responseObserver.onError(Status.INVALID_ARGUMENT
+                    .withDescription("Id was lower then 0")
+                    .augmentDescription("ID: " + request.getId())
+                    .asRuntimeException());
+        }
         final CustomerResponse res = CustomerResponse.newBuilder()
                 .setStatus(EXPRECTED_VALUE.equals(request.getValue()))
                 .setId(request.getId() + 1)
@@ -40,7 +48,7 @@ public class CustomerServer extends CustomerServiceGrpc.CustomerServiceImplBase 
 
     @Override
     public void myServiceServerStreaming(CustomerRequest request, StreamObserver<CustomerResponse> responseObserver) {
-        Stream.of(request, this, "myServiceServerStreaming function").forEach(System.out::println);
+        Stream.of(request, this, Context.current().toString(), "myServiceServerStreaming function").forEach(System.out::println);
 
         Stream.of(true, false, true, true)
                 .map(s -> constructCustomerResponse(s))
@@ -65,6 +73,7 @@ public class CustomerServer extends CustomerServiceGrpc.CustomerServiceImplBase 
 
     @Override
     public StreamObserver<CustomerRequest> myServiceClientStreaming(StreamObserver<CustomerResponse> responseObserver) {
+        Stream.of(responseObserver, this, Context.current(), "myServiceClientStreaming function").forEach(System.out::println);
         return new CustomerRequestStreamObserver(responseObserver);
     }
 
@@ -110,7 +119,7 @@ public class CustomerServer extends CustomerServiceGrpc.CustomerServiceImplBase 
 
         @Override
         public void onNext(CustomerRequest req) {
-            responseObserver.onNext(constructCustomerResponse(req.getId()%2==0));
+            responseObserver.onNext(constructCustomerResponse(req.getId() % 2 == 0));
         }
 
         @Override
