@@ -1,1 +1,8 @@
 ssl/*
+.idea/
+.gradle
+build/
+gradle/
+out/
+gradlew
+gradlew.bat

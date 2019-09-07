@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_package = "me.piotr.wera.customer";
+option java_multiple_files = true;
+
+message CustomerRequest {
+    string value = 1;
+    int32 id = 2;
+}
+
+message CustomerResponse {
+    bool status = 1;
+    int32 id = 2;
+}
+
+service CustomerService {
+    // Unary call
+    rpc MyServiceUnary (CustomerRequest) returns (CustomerResponse) {};
+
+    // Server Streaming
+    rpc MyServiceServerStreaming (CustomerRequest) returns (stream CustomerResponse) {};
+
+    // Client Streaming
+    rpc MyServiceClientStreaming (stream CustomerRequest) returns (CustomerResponse) {};
+
+    // BiDi Streaming
+    rpc MyServiceBiDiStreaming (stream CustomerRequest) returns (stream CustomerResponse) {};
+}
