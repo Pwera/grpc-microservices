@@ -1,4 +1,7 @@
-ssl/*
+ssl/*.crt
+ssl/*.key
+ssl/*.csr
+ssl/*.pem
 .idea/
 .gradle
 build/
