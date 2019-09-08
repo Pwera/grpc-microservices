@@ -4,26 +4,26 @@ import io.grpc.Context;
 import io.grpc.Server;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
-import me.piotr.wera.common.GrpcServerCommon;
+import me.piotr.wera.common.GrpcCommons;
 import me.piotr.wera.customer.CustomerRequest;
 import me.piotr.wera.customer.CustomerResponse;
 import me.piotr.wera.customer.CustomerServiceGrpc;
 
 import java.util.stream.Stream;
 
-public class CustomerServer extends CustomerServiceGrpc.CustomerServiceImplBase implements GrpcServerCommon {
+public class Customer extends CustomerServiceGrpc.CustomerServiceImplBase implements GrpcCommons {
 
     private static final String EXPECTED_VALUE = "expected";
     private static int messageID = 0;
 
     public static void main(String[] args) throws Exception {
-        new CustomerServer().go();
+        new Customer().go();
     }
 
     public void go() throws Exception {
         final Server server = createServer(USE_SSL);
         server.start();
-        System.out.println("CustomerServer listening for connection on port " + GRPC_SERVER_PORT);
+        System.out.println("Customer listening for connection on port " + GRPC_SERVER_PORT);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> onServerShutdown(server)));
         server.awaitTermination();
     }

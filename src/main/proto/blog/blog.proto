@@ -4,6 +4,9 @@ package blog;
 
 option go_package = "blogpb";
 
+option java_package = "me.piotr.wera";
+option java_multiple_files = true;
+
 message Blog {
     string id = 1;
     string author_id = 2;
@@ -53,8 +56,11 @@ message ListBlogResponse {
 
 service BlogService {
     rpc CreateBlog (CreateBlogRequest) returns (CreateBlogResponse);
-    rpc ReadBlog (ReadBlogRequest) returns (ReadBlogResponse); // return NOT_FOUND if not found
-    rpc UpdateBlog (UpdateBlogRequest) returns (UpdateBlogResponse); // return NOT_FOUND if not found
-    rpc DeleteBlog (DeleteBlogRequest) returns (DeleteBlogResponse); // return NOT_FOUND if not found
+    // return NOT_FOUND if not found
+    rpc ReadBlog (ReadBlogRequest) returns (ReadBlogResponse);
+    // return NOT_FOUND if not found
+    rpc UpdateBlog (UpdateBlogRequest) returns (UpdateBlogResponse);
+    // return NOT_FOUND if not found
+    rpc DeleteBlog (DeleteBlogRequest) returns (DeleteBlogResponse);
     rpc ListBlog (ListBlogRequest) returns (stream ListBlogResponse);
 }

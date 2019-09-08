@@ -468,7 +468,7 @@ func (m *ListBlogResponse) GetBlog() *Blog {
 }
 
 func init() {
-	proto.RegisterType((*Blog)(nil), "blog.Blog")
+	proto.RegisterType((*Blog)(nil), "blog.BlogServer")
 	proto.RegisterType((*CreateBlogRequest)(nil), "blog.CreateBlogRequest")
 	proto.RegisterType((*CreateBlogResponse)(nil), "blog.CreateBlogResponse")
 	proto.RegisterType((*ReadBlogRequest)(nil), "blog.ReadBlogRequest")

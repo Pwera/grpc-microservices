@@ -227,7 +227,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Blog Service Started")
+	fmt.Println("BlogServer Service Started")
 	collection = client.Database("mydb").Collection("blog")
 
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
