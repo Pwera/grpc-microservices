@@ -11,12 +11,12 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 
-	"github.com/pwera/gRPC-notes/todo"
+	"github.com/pwera/gRPC-notes/src/main/go/todo"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	tls := true
+	tls := false
 	opts := grpc.WithInsecure()
 	if tls {
 		certFile := "ssl/ca.crt"
@@ -37,11 +37,11 @@ func main() {
 
 	doUnary(c)
 
-	// doServerStreaming(c)
+	doServerStreaming(c)
 
-	// doClientStreaming(c)
+	doClientStreaming(c)
 
-	// doBiDiStreaming(c)
+	doBiDiStreaming(c)
 }
 
 func doBiDiStreaming(c todo.GreetServiceClient) {

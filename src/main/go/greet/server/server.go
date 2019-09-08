@@ -14,8 +14,8 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
-	"github.com/pwera/gRPC-notes/todo"
-	grpc "google.golang.org/grpc"
+	"github.com/pwera/gRPC-notes/src/main/go/todo"
+	"google.golang.org/grpc"
 )
 
 type server struct{}

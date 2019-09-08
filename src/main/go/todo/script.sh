@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # FILES=pb/*.proto
 # for f in $FILES
 # do 

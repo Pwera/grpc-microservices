@@ -1,4 +1,4 @@
-package me.piotr.wera.customer.server;
+package me.piotr.wera.blog.server;
 
 import io.grpc.Context;
 import io.grpc.Server;
@@ -11,13 +11,13 @@ import me.piotr.wera.customer.CustomerServiceGrpc;
 
 import java.util.stream.Stream;
 
-public class CustomerServer extends CustomerServiceGrpc.CustomerServiceImplBase implements GrpcServerCommon {
+public class BlogServer extends CustomerServiceGrpc.CustomerServiceImplBase implements GrpcServerCommon {
 
     private static final String EXPECTED_VALUE = "expected";
     private static int messageID = 0;
 
     public static void main(String[] args) throws Exception {
-        new CustomerServer().go();
+        new BlogServer().go();
     }
 
     public void go() throws Exception {
@@ -54,6 +54,7 @@ public class CustomerServer extends CustomerServiceGrpc.CustomerServiceImplBase 
 
         responseObserver.onCompleted();
     }
+
 
     private CustomerResponse constructCustomerResponse(boolean status) {
         return CustomerResponse.newBuilder()

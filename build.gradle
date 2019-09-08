@@ -43,6 +43,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.guava/guava
     compile group: 'com.google.guava', name: 'guava', version: '26.0-jre'
 
+    compile group: 'org.mongodb', name: 'mongodb-driver-sync', version: '3.8.2'
 
 
 

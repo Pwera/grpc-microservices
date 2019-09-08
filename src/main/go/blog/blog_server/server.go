@@ -3,20 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 
-	"github.com/mongodb/mongo-go-driver/bson"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
-
-	"github.com/mongodb/mongo-go-driver/bson/primitive"
-
-	"github.com/mongodb/mongo-go-driver/mongo"
 
 	"github.com/simplesteph/grpc-go-course/blog/blogpb"
 	"google.golang.org/grpc"

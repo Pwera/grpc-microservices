@@ -6,17 +6,23 @@ import io.grpc.Deadline;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.netty.shaded.io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import io.opencensus.trace.Status;
+import io.vavr.control.Try;
 import me.piotr.wera.customer.CustomerRequest;
 import me.piotr.wera.customer.CustomerResponse;
 import me.piotr.wera.customer.CustomerServiceGrpc;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 public class CustomerClient {
     private static int messageID = 0;
+    private static final File SSL_FILE = new File("ssl/ca.crt");
+    private static final boolean USE_SSL = true;
 
     public static void main(String[] args) {
         new CustomerClient().go();
@@ -24,9 +30,8 @@ public class CustomerClient {
 
     private void go() {
         System.out.println("Starting gRPC Client");
-        final ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
-                .usePlaintext()
-                .build();
+        final ManagedChannel channel = createChannel(USE_SSL);
+
         final CustomerServiceGrpc.CustomerServiceBlockingStub syncClient = CustomerServiceGrpc.newBlockingStub(channel);
 
         System.out.println("Calling gRPC Unary Method");
@@ -99,6 +104,20 @@ public class CustomerClient {
         @Override
         public void onCompleted() {
 
+        }
+    }
+
+    private ManagedChannel createChannel(boolean useSSL) {
+        if (useSSL) {
+            return NettyChannelBuilder.forAddress("localhost", 50051)
+                    .sslContext(Try.of(() ->
+                            GrpcSslContexts.forClient().trustManager(SSL_FILE))
+                            .mapTry(sslContextBuilder -> sslContextBuilder.build()).get())
+                    .build();
+        } else {
+            return ManagedChannelBuilder.forAddress("localhost", 50051)
+                    .usePlaintext()
+                    .build();
         }
     }
 }
