@@ -1,6 +1,7 @@
 package me.piotr.wera.blog.client;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.Uninterruptibles;
 import io.grpc.ManagedChannel;
 import io.grpc.Status;
@@ -98,7 +99,9 @@ public class BlogClient implements GrpcCommons {
 
 
         System.out.println("Calling gRPC listBlog Method");
-        syncClient.listBlog(null);
+        Streams.stream(syncClient.listBlog(ListBlogRequest.newBuilder().build()))
+                .map(s -> s.getBlog())
+                .forEach(this::responseFromServer);
 
         System.out.println("Shutting down channel");
         Uninterruptibles.sleepUninterruptibly(4000L, TimeUnit.MILLISECONDS);
