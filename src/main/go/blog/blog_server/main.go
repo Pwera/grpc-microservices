@@ -3,15 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/pwera/gRPC-Notes/blog_server/server"
-	"github.com/pwera/gRPC-Notes/blogpb"
+	"github.com/pwera/blog_server/blogpb"
+	"github.com/pwera/blog_server/server"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net"
 	"os"
 	"os/signal"
-
 
 	"google.golang.org/grpc/reflection"
 

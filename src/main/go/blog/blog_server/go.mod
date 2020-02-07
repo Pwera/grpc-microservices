@@ -1,4 +1,4 @@
-module github.com/pwera/gRPC-Notes
+module github.com/pwera/blog_server
 
 go 1.13
 
