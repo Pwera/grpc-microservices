@@ -6,7 +6,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/pwera/gRPC-Notes/src/main/go/blog/blogpb"
+	"github.com/pwera/gRPC-Notes/blogpb"
 	"google.golang.org/grpc"
 )
 
