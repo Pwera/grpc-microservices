@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -11,11 +12,16 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 
-	"github.com/pwera/gRPC-notes/src/main/go/todo"
+	"github.com/pwera/greetclient/todo"
 	"google.golang.org/grpc"
 )
 
 func main() {
+	var server_host string
+	var server_port string
+	flag.StringVar(&server_host, "server_host", "greet_server", "")
+	flag.StringVar(&server_port, "server_port", "50051", "")
+	flag.Parse()
 	tls := false
 	opts := grpc.WithInsecure()
 	if tls {
@@ -28,7 +34,7 @@ func main() {
 		opts = grpc.WithTransportCredentials(creds)
 	}
 
-	conn, err := grpc.Dial("localhost:50051", opts)
+	conn, err := grpc.Dial(server_host+":" + server_port, opts)
 	if err != nil {
 		log.Fatalf("Couldnt connect to: %v", err)
 	}

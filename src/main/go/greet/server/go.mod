@@ -1,8 +1,8 @@
-module github.com/pwera/gRPC-Notes/src/main/go/greet/server
+module github.com/pwera/greetserver
 
 go 1.13
 
 require (
-	github.com/pwera/gRPC-notes v0.0.0-20190909190334-30e42ca0c632
+	github.com/golang/protobuf v1.3.2
 	google.golang.org/grpc v1.26.0
 )

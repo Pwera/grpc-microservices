@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
-	"github.com/pwera/gRPC-notes/src/main/go/todo"
+	"github.com/pwera/greetserver/todo"
 	"google.golang.org/grpc"
 )
 
