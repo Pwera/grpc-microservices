@@ -1,4 +1,4 @@
-#gRPC
+# gRPC
 
 Is a free and open-source framework developed by Google, part of CNCF.
 Allows to define request and response for RPC (Remote Procedure Calls) and handles all the rest for you.
@@ -44,10 +44,9 @@ Additionally using Interceptors, we can also provide authentication
 
 ## Unary 
 Unary is what a traditional API looks like (http rest)
-``` 
-     service GreetService {
-          rpc Greet(GreetRequest) returns (GreetResponse){};
-     }
+```
+service GreetService {
+     rpc Greet(GreetRequest) returns (GreetResponse){};
 }
 ```
 
@@ -56,9 +55,8 @@ Unary is what a traditional API looks like (http rest)
 In gRPC server streaming calls are defined using keyword "stream"
 
 ``` 
-     service GreetService {
-          rpc Greet(GreetRequest) returns (stream GreetResponse){};
-     }
+service GreetService {
+     rpc Greet(GreetRequest) returns (stream GreetResponse){};
 }
 ```
 
@@ -67,18 +65,16 @@ In gRPC client streaming calls are defined using keyword "stream".
 The client will send many message to the server and will receive one response form the server, at any time.
 
 ``` 
-     service GreetService {
-          rpc ManyGreetRequest(stream GreetRequest) returns (GreetResponse){};
-     }
+service GreetService {
+     rpc ManyGreetRequest(stream GreetRequest) returns (GreetResponse){};
 }
 ```
 
 ## Bi Directional streaming
 
 ``` 
-     service GreetService {
-          rpc ManyGreetRequest(stream GreetRequest) returns (stream GreetResponse){};
-     }
+service GreetService {
+     rpc ManyGreetRequest(stream GreetRequest) returns (stream GreetResponse){};
 }
 ```
 
@@ -103,13 +99,11 @@ We may want reflection for two reasons:
 - Allowing command line interfaces to talk to our server without have a preliminary .proto
 
 
-``` 
-     wget https://github.com/ktr0731/evans/releases/download/0.8.2/evans_linux_amd64.tar.gz
-     evans -p 50051 -r
-     show services
-     call Unary
-     
-
+``` bash
+wget https://github.com/ktr0731/evans/releases/download/0.8.2/evans_linux_amd64.tar.gz
+evans -p 50051 -r
+show services
+call Unary
 ```
 Evans CLI
 
