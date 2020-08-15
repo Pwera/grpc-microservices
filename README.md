@@ -54,7 +54,7 @@ service GreetService {
 ## Server streaming
 In gRPC server streaming calls are defined using keyword "stream"
 
-``` 
+```
 service GreetService {
      rpc Greet(GreetRequest) returns (stream GreetResponse){};
 }
@@ -99,12 +99,38 @@ We may want reflection for two reasons:
 - Allowing command line interfaces to talk to our server without have a preliminary .proto
 
 
+## Evans CLI
 ``` bash
-wget https://github.com/ktr0731/evans/releases/download/0.8.2/evans_linux_amd64.tar.gz
+wget https://github.com/ktr0731/evans/releases/download/0.9.0/evans_linux_amd64.tar.gz
+tar -xzf evans_linux_amd64.tar.gz
 evans -p 50051 -r
 show services
 call Unary
 ```
-Evans CLI
 
-## Blog with MongoDB
+
+
+## grpcurl
+
+``` bash
+##Installation
+wget https://github.com/fullstorydev/grpcurl/releases/download/v1.7.0/grpcurl_1.7.0_linux_x86_64.tar.gz
+tar -xzf grpcurl_1.7.0_linux_x86_64.tar.gz
+## List available services, through reflection
+grpcurl --plaintext 0.0.0.0:50052 list
+grpcurl --plaintext 0.0.0.0:50052 describe
+## Prepare dummy request body
+grpcurl --plaintext -msg-template 0.0.0.0:50052 describe todo.GreetRequest
+## Call gRPC request
+grpcurl --plaintext  -d '{
+  "greet": {
+    "first": "foo",
+    "second": "bar"
+  }
+}' 0.0.0.0:50052 todo.GreetService/Unary
+## List available services, through .proto
+grpcurl --import-path ../proto/customer -proto Customer.proto list
+grpcurl --import-path ../proto/customer -proto Customer.proto list CustomerService
+
+
+```
