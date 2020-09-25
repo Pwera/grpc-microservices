@@ -2,6 +2,7 @@ syntax = "proto3";
 
 option java_package = "me.piotr.wera.customer";
 option java_multiple_files = true;
+package pb;
 
 message CustomerRequest {
     string value = 1;
@@ -9,7 +10,7 @@ message CustomerRequest {
 }
 
 message CustomerResponse {
-    bool status = 1;
+    string status = 1;
     int32 id = 2;
 }
 
