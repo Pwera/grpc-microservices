@@ -1,5 +1,5 @@
 [package]
-name = "grpcrustt"
+name = "customerservice"
 version = "0.1.0"
 authors = ["48788"]
 edition = "2018"
@@ -42,8 +42,8 @@ tonic-build = "0.3.1"
 
 [[bin]]
 name = "server"
-path = "src/helloworld/server.rs"
+path = "src/customerservice/server.rs"
 
 [[bin]]
 name = "client"
-path = "src/helloworld/client.rs"
+path = "src/customerservice/client.rs"

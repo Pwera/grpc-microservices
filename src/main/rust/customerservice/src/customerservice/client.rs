@@ -1,7 +1,7 @@
 use pb::customer_service_client::CustomerServiceClient;
 use pb::CustomerRequest;
 
-pub mod hello_world {
+pub mod pb {
     tonic::include_proto!("pb");
 }
 

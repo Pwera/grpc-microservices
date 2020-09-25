@@ -7,7 +7,7 @@ use futures::Stream;
 use std::pin::Pin;
 // use tokio::sync::mpsc;
 
-pub mod hello_world {
+pub mod pb {
     tonic::include_proto!("pb");
 }
 
@@ -25,7 +25,7 @@ impl CustomerService for MyGreeter {
     ) -> Result<Response<CustomerResponse>, Status> {
         println!("Got a request from {:?}", request.remote_addr());
 
-        let reply = hello_world::CustomerResponse {
+        let reply = pb::CustomerResponse {
             status: format!("Hello {}!", "c"),
             id: 34,
         };
