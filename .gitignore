@@ -10,3 +10,6 @@ out/
 gradlew
 gradlew.bat
 gRPC-notes.iml
+src/basic/rust/target/
+
+src/main/rust/customerservice/target/

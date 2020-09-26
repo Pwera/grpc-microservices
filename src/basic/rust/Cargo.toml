@@ -1,0 +1,26 @@
+[package]
+name = "basic"
+version = "0.1.0"
+authors = ["48788"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tonic = { version = "0.3.1", features = ["tls"] }
+prost = "0.6"
+tokio = { version = "0.2", features = ["rt-threaded", "time", "stream", "fs", "macros", "uds"] }
+futures = { version = "0.3", default-features = false, features = ["alloc"] }
+async-stream = "0.2"
+#tower = "0.3"
+
+[build-dependencies]
+tonic-build = "0.3.1"
+
+[[bin]]
+name = "server"
+path = "src/basic/server.rs"
+
+[[bin]]
+name = "client"
+path = "src/basic/client.rs"
