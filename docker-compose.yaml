@@ -1,0 +1,11 @@
+version : '3'
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: verysecretpass
+      MYSQL_DATABASE: order
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./db.sql:/docker-entrypoint-initdb.d/1.sql"
