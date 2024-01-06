@@ -46,24 +46,14 @@ func (o *OrderDatabaseTestSuite) SetupSuite() {
 }
 
 func (o *OrderDatabaseTestSuite) Test_Should_Save_Order() {
-<<<<<<< HEAD
-	adapter, err := NewAdapter(o.DataSourceUrl, nil, "orders-v1")
+	adapter, err := NewAdapter(o.DataSourceUrl, nil)
 	o.Nil(err)
 	saveErr := adapter.Save(context.Background(), &domain.Order{})
-=======
-	adapter, err := NewAdapter(o.DataSourceUrl)
-	o.Nil(err)
-	saveErr := adapter.Save(&domain.Order{})
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 	o.Nil(saveErr)
 }
 
 func (o *OrderDatabaseTestSuite) Test_Should_Get_Order() {
-<<<<<<< HEAD
-	adapter, _ := NewAdapter(o.DataSourceUrl, nil, "orders-v1")
-=======
-	adapter, _ := NewAdapter(o.DataSourceUrl)
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
+	adapter, _ := NewAdapter(o.DataSourceUrl, nil)
 	order := domain.NewOrder(2, []domain.OrderItem{
 		{
 			ProductCode: "CAM",
@@ -71,16 +61,10 @@ func (o *OrderDatabaseTestSuite) Test_Should_Get_Order() {
 			UnitPrice:   1.01,
 		},
 	})
-<<<<<<< HEAD
 	ctx := context.Background()
 	err := adapter.Save(ctx, &order)
 	o.Nil(err)
 	ord, err := adapter.Get(ctx, order.ID)
-=======
-	err := adapter.Save(&order)
-	o.Nil(err)
-	ord, err := adapter.Get(order.ID)
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 	o.Nil(err)
 	o.Equal(int32(2), ord.CustomerID)
 }

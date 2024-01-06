@@ -2,14 +2,9 @@ package grpc
 
 import (
 	"fmt"
-<<<<<<< HEAD
 	"github.com/pwera/grpc-micros-commons/config"
 	"github.com/pwera/grpc-micros-payment/internal/ports"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
-=======
-	"github.com/pwera/grpc-micros-payment/config"
-	"github.com/pwera/grpc-micros-payment/internal/ports"
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
@@ -36,12 +31,8 @@ func (a Adapter) Run() {
 		log.Fatalf("failed to listen on port %d, error: %v", a.port, err)
 	}
 
-<<<<<<< HEAD
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()))
-=======
-	grpcServer := grpc.NewServer()
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 	a.server = grpcServer
 	RegisterPaymentServiceServer(grpcServer, a)
 	if config.GetEnv() == "development" {

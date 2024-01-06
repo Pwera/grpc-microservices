@@ -3,8 +3,5 @@ go 1.20
 use (
 	./order
 	./payment
-<<<<<<< HEAD
 	./commons
-=======
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 )

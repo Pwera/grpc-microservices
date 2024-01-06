@@ -11,9 +11,9 @@ It's used by :
 - CoackroachDB
 
 # Samples:
- 1)  Basic [https://github.com/Pwera/gRPC-Notes/tree/master/src/basic] 
- Golang & Rust & Java clients and servers.
- 2) TBA
+1)  Basic [https://github.com/Pwera/gRPC-Notes/tree/master/src/basic] 
+    Golang & Rust & Java clients and servers.
+2) TBA
 #  
 
 ## HTTP/2
@@ -28,7 +28,7 @@ The client & server can push messages in parallel over the same TCP connection, 
 
 HTTP/2 supports server push, servers can push streams for one request from the client. It allso supports header compression.
 
-HTTP 1.1 also has a severe limitation of how a single connection can be used for multiple requests: all requests must be sent back in the order the corresponding requests were received. So clients that use pipelining will see head-of-line blocking delays, but the later responses may have been computed quickly, and must wait for earlier responses to be computed and transmitted before they can be sent. And the other alternative, using a connection for only one request at a time and then using a pool of connections to issue parallel requests, consumes more resources in both clients and servers as well as potentially in between proxies and load balancers. HTTP/2 and Protocol Buffers do not have these problems. 
+HTTP 1.1 also has a severe limitation of how a single connection can be used for multiple requests: all requests must be sent back in the order the corresponding requests were received. So clients that use pipelining will see head-of-line blocking delays, but the later responses may have been computed quickly, and must wait for earlier responses to be computed and transmitted before they can be sent. And the other alternative, using a connection for only one request at a time and then using a pool of connections to issue parallel requests, consumes more resources in both clients and servers as well as potentially in between proxies and load balancers. HTTP/2 and Protocol Buffers do not have these problems.
 
 
 ## Types of API in gRPC
@@ -49,7 +49,7 @@ HTTP 1.1 also has a severe limitation of how a single connection can be used for
 Each language will provide an API to load gRPC with the required certificates and provide encryption capability out  of the box
 Additionally using Interceptors, we can also provide authentication
 
-## Unary 
+## Unary
 Unary is what a traditional API looks like (http rest)
 ``` protobuf
 service GreetService {
@@ -58,7 +58,7 @@ service GreetService {
 ```
 
 ## Architecture of gRPC is layered:
-- he lowest layer is the transport: gRPC uses HTTP/2 as its transport protocol. HTTP/2 provides the same basic semantics as HTTP 1.1 (the version with which nearly all developers are familiar), but aims to be more efficient and more secure. 
+- he lowest layer is the transport: gRPC uses HTTP/2 as its transport protocol. HTTP/2 provides the same basic semantics as HTTP 1.1 (the version with which nearly all developers are familiar), but aims to be more efficient and more secure.
 - The next layer is the channel. This is a thin abstraction over the transport. The channel defines calling conventions and implements the mapping of an RPC onto the underlying transport. At this layer, a gRPC call consists of a client-provided service name and method name, optional request metadata (key-value pairs), and zero or more request messages. A call is completed when the server provides optional response header metadata, zero or more response messages, and response trailer metadata. The trailer metadata indicates the final disposition of the call: whether it was a success or a failure. At this layer, there is no knowledge of interface constraints, data types, or message encoding. A message is just a sequence of zero or more bytes. A call may have any number of request and response messages.
 - The last layer is the stub. The stub layer is where interface constraints and data types are defined. Does a method accept exactly one request message or a stream of request messages? What kind of data is in each response message and how is it encoded? The answers to these questions are provided by the stub. The stub marries the IDL-defined interfaces to a channel. The stub code is generated from the IDL. The channel layer provides the ABI that these generated stubs use.
 
@@ -182,7 +182,7 @@ We may want reflection for two reasons:
 | Client load balancing   |       Proxy load balancing
 |----------|:-------------:|
 | The  main  advantage  of  client  load  balancing  is  obviously  its  perfor-mance.  No  middle  agents  between  client  and  servers  makes  it  optimalfor low latency constraints.As  you  can  imagine,  however,  client  load  balancing  adds  more  com-plexity  to  the  architecture.  The  client  is  much  more  sophisticated,  sinceit needs to apply strategies to equilibrate the traffic (Round Robin or oth-ers).The  client  will  need  to  keep  track  on  the  health  of  each  backend,  inorder  to  redirect  traffic  elsewhere  if  a  backend  malfunction  is  detected.This would be the thick client approach.Another  alternative  would  be  to  use  the  Lookaside  Load  Balancer,which  is  kind  of  a  Zookeeper/Consul/Eureka  who  communicates  the  cli-ent  that  is  the  best  backend  server  to  communicate  with. |  The  main  advantage  of  proxy  load  balancing  is  the  simplicity  of  the  cli-ent. It will only need a single endpoint to create a connection with. All ofthe  workload  problems,  the  security  issues  and  the  awareness  of  thehealth of every backend server, will be completely transparent to the cli-ent.Another  advantage  is  that  the  TLS  certificates  must  be  managed  di-rectly by the proxy. Backend servers don’t need to have secured connec-tions, which makes the architecture much less complex.In  return,  the  latency  will  be  increased  and  the  throughput  may  belimited by the capabilities of the proxy.There  are  two  kind  of  proxies  in  function  of  the  OSI  level  that  theywork on: 1) Transport Level: this option is dumber, but easier to implement.This is done on the TCP level, where the proxy just checks that thesocket is open, in order to know if the backend is up and running.This kind of proxy is very performant since there is no payloadtreatment. Client data is just copied to the backend connection.   2) Application Level: when the proxy needs to be a little bit smarterin terms of workload decisioning, this is the best option, in detri-ment of the added latency. On the application level, the HTTP/2protocol is parsed in order to inspect each request and make deci-sions on the fly. |
- 
+
 ## CLI tools
 Here  are  some  useful  tools  that  you  can  use  to  interact  with  a  running gRPC server on your local machine:
 - grpcnode - CLI tool for quickly making servers and client, dynami-cally, in JavaScript
@@ -246,8 +246,8 @@ HTTP/2HTTP/2  was  born  to  accompany  the  new  needs  of  the  Internet’s  
 
 HTTP2 verbs:
 - Frames: frame in HTTP/2 is the smallest unit data representation. It contains:•
-   - A frame Header that normally only contains the identifier of thestream that it belongs to.
-   - The data content, which can have different formats depending onthe kind of data that it contains. Most of the frames may contain aPadding block at the end of the frame, and it is used to obfuscatethe  length  of  the  frame  for  security  reasons. 
+  - A frame Header that normally only contains the identifier of thestream that it belongs to.
+  - The data content, which can have different formats depending onthe kind of data that it contains. Most of the frames may contain aPadding block at the end of the frame, and it is used to obfuscatethe  length  of  the  frame  for  security  reasons.
 - Messages: message is a sequence of frames representing a request or a response.
 - Streams:  stream  is  a  bidirectional  flow  of  bytes  that  in  a  given  connection  maycarry one or more messages. Each stream is identified by an integer thatwill be written on the header of any frame.Note  that  in  a  single  TCP  connection,  several  streams  may  be  activeconcurrently at the same time.Streams   have   lifecycles   and   they   are   represented   by   transitionsamong states. These are all the possible states:
   - Idle: Initial state for any opened stream.

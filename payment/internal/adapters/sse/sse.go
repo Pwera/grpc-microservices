@@ -4,12 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/pwera/grpc-micros-payment/internal/application/core/domain"
-<<<<<<< HEAD
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
-=======
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 	"net/http"
 	"sync"
 	"sync/atomic"
@@ -20,17 +17,12 @@ type Adapter struct {
 	m        *sync.Mutex
 	counter  int64
 	requests map[int64]chan domain.Payment
-<<<<<<< HEAD
-=======
-	mux      http.ServeMux
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 }
 
 func NewAdapter() *Adapter {
 	adapter := &Adapter{
 		m:        new(sync.Mutex),
 		requests: map[int64]chan domain.Payment{},
-<<<<<<< HEAD
 	}
 	http.Handle("/sse", otelhttp.NewHandler(adapter.wrappedSse(), "/see"))
 	return adapter
@@ -47,15 +39,6 @@ func (s *Adapter) wrappedSse() http.HandlerFunc {
 	}
 }
 func (s *Adapter) handlerSSE(w http.ResponseWriter, r *http.Request) {
-=======
-		mux:      http.ServeMux{},
-	}
-	adapter.mux.HandleFunc("/sse", adapter.SSE)
-	return adapter
-}
-
-func (s *Adapter) SSE(w http.ResponseWriter, r *http.Request) {
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "text/event-stream")
@@ -109,11 +92,7 @@ func (s *Adapter) Send(p domain.Payment) {
 
 func (s *Adapter) Run() {
 	go func() {
-<<<<<<< HEAD
 		if err := http.ListenAndServe(fmt.Sprintf("127.0.0.1:%d", 9999), nil); err != nil {
-=======
-		if err := http.ListenAndServe(fmt.Sprintf("127.0.0.1:%d", 9999), &s.mux); err != nil {
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
 			fmt.Printf("Error starting proxy: %v\n", err)
 		}
 	}()

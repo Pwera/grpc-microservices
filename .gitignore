@@ -9,9 +9,5 @@ gradle/
 out/
 gradlew
 gradlew.bat
-<<<<<<< HEAD
 gRPC-notes.iml
 *.sum
-=======
-gRPC-notes.iml
->>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
