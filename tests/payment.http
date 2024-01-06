@@ -1,0 +1,5 @@
+GRPC localhost:3001/PaymentService/Create
+
+{
+  "price": 3.0
+}

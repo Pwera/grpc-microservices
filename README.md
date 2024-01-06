@@ -8,14 +8,13 @@
 - [x] add circuit-breaker into order-v1 
 - [x] add retry into order-v1
 - [x] [testcontainers](https://testcontainers.com/) integration tests
-
+- [x] [opentelemetry](https://opentelemetry.io/) integration
 
 - [ ] service diagram
 - [ ] dockerize
 - [ ] e2e tests
 - [ ] unify logging
 - [ ] tls encryption
-- [ ] [opentelemetry](https://opentelemetry.io/) integration
 - [ ] context to logging
 - [ ] better implementation for grpc error wrapping
 - [ ] graceful shutdown signal

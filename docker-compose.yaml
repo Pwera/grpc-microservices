@@ -1,0 +1,24 @@
+version : '3'
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: verysecretpass
+      MYSQL_DATABASE: order
+    ports:
+      - "3306:3306"
+    volumes:
+<<<<<<< HEAD
+      - "./tests/db.sql:/docker-entrypoint-initdb.d/1.sql"
+  jaeger:
+    image: jaegertracing/all-in-one:${JAEGER_VERSION:-latest}
+    ports:
+      - "16686:16686"
+      - "14278:14278"
+      - "4317:4317"
+      - "4318:4318"
+    environment:
+      - LOG_LEVEL=debug
+=======
+      - "./db.sql:/docker-entrypoint-initdb.d/1.sql"
+>>>>>>> d5d6d859f89eecf70f457a12f02ef3d2b3daf9e4
